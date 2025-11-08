@@ -7,16 +7,19 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector((state) => state.cart.items || []);
   const dispatch = useDispatch();
 
-  // Calculate total amount for all products in the cart
   const calculateTotalAmount = (items) => {
-    if (!Array.isArray(items)) return 0;
-    return items.reduce((total, item) => {
-      const cost = parseFloat(item.cost?.substring(1)) || 0;
-      return total + cost * (item.quantity || 1);
-    }, 0);
+    let total = 0;
+    items.forEach((item) => {
+      const quantity = item.quantity;
+      const cost = parseFloat(item.cost.substring(1)); // "$15" -> 15
+      total += quantity * cost;
+    });
+    return total;
   };
 
-  const handleContinueShopping = (e) => onContinueShopping(e);
+  const handleContinueShopping = (e) => {
+    onContinueShopping(e);
+  };
 
   const handleIncrement = (item) => {
     dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
@@ -35,8 +38,8 @@ const CartItem = ({ onContinueShopping }) => {
   };
 
   const calculateTotalCost = (item) => {
-    const cost = parseFloat(item.cost?.substring(1)) || 0;
-    return cost * (item.quantity || 1);
+    const unitPrice = parseFloat(item.cost.substring(1));
+    return unitPrice * item.quantity;
   };
 
   const total = calculateTotalAmount(cart);
@@ -52,7 +55,11 @@ const CartItem = ({ onContinueShopping }) => {
       ) : (
         cart.map((item) => (
           <div className="cart-item" key={item.name}>
-            <img className="cart-item-image" src={item.image} alt={item.name} />
+            <img
+              className="cart-item-image"
+              src={item.image}
+              alt={item.name}
+            />
             <div className="cart-item-details">
               <div className="cart-item-name">{item.name}</div>
               <div className="cart-item-cost">{item.cost}</div>
@@ -93,7 +100,7 @@ const CartItem = ({ onContinueShopping }) => {
       <div className="continue_shopping_btn">
         <button
           className="get-started-button"
-          onClick={(e) => handleContinueShopping(e)}
+          onClick={handleContinueShopping}
         >
           Continue Shopping
         </button>
