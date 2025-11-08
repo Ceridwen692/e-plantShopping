@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-//import './ProductList.css';
+import './ProductList.css';
 import CartItem from './CartItem';
 import { addItem } from './CartSlice';
 import { useDispatch } from 'react-redux';
@@ -19,6 +19,13 @@ function ProductList({ onHomeClick }) {
   };
 
   const plantsArray = [
+      const totalProducts = plantsArray.reduce(
+        (sum, cat) => sum + cat.plants.length,
+        0
+      );
+      console.log('DEBUG categories:', plantsArray.map(c => c.category));
+      console.log('DEBUG total products:', totalProducts);
+
     {
         category: "Air Purifying Plants",
         plants: [
